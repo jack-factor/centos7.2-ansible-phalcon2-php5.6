@@ -1,0 +1,26 @@
+- include: dependens.yml
+
+- name: install php pakage rpm
+  yum : name={{ item }} state=present
+  with_items:
+    - https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+    - https://mirror.webtatic.com/yum/el6/latest.rpm
+
+- name: ensure php installed
+  yum : name={{ item }} state=present
+  with_items:
+    - php70w
+    - php70w-cli
+    - php70w-fpm
+    - php70w-mysql
+    - php70w-devel
+    - php70w-gd
+    - php70w-pspell
+    - php70w-snmp
+    - php70w-xmlrpc
+    - php70w-xml
+    - php70w-bcmath
+    - php70w-mbstring
+
+- name: restart php70w-fpm
+  service: name=php-fpm state=restarted  enabled=yes

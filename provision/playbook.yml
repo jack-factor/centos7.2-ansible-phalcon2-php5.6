@@ -1,0 +1,16 @@
+---
+- name: Appli common configurations all roles
+  hosts: all
+  user: vagrant
+  sudo: yes
+  roles:
+    - common
+
+- hosts: webservers
+  user: vagrant
+  sudo: yes
+  roles:
+    - nginx
+    - mysql
+    - php56
+    - phalcon

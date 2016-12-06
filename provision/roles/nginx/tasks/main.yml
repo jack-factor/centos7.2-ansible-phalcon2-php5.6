@@ -1,0 +1,24 @@
+---
+  - name: ensure ngix at las version
+    yum: name=nginx state=latest
+    notify: start nginx
+
+  - name: nginx file
+    file: path=/etc/nginx/{{ item }} state=directory mode=0755
+    with_items:
+      - sites-enabled
+      - sites-available
+
+  - name: config nginx
+    template: src=nginx.conf dest=/etc/nginx/nginx.conf
+    notify: restart nginx
+
+  - name: config nginx virtualhost
+    template: src=vhost dest=/etc/nginx/sites-enabled/{{ vhost }}
+  
+  - name: link vhost
+    file:
+      src: /etc/nginx/sites-enabled/{{ vhost }}
+      dest: /etc/nginx/sites-available/{{ vhost }}
+      state: link
+    notify: restart nginx

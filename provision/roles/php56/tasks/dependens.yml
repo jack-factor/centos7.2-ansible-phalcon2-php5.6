@@ -1,0 +1,6 @@
+- name: dependens for php
+  yum : name={{ item }} state=present
+  with_items:
+    - gcc
+    - pcre-devel
+    - make

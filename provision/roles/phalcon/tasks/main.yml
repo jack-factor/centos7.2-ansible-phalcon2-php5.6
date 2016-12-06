@@ -1,0 +1,27 @@
+- name: check phalcon version
+  shell: php -i | grep phalcon
+  ignore_errors: True
+  register: check_phalcon_extension
+
+- name: phalcon file
+  file: path=/srv/cphalcon state=directory mode=0755
+
+- name: get phalcon repository
+  git: 
+    repo: git://github.com/phalcon/cphalcon.git
+    version: phalcon-v2.0.13
+    dest: /srv/cphalcon
+  when: check_phalcon_extension.stdout.find('enabled') == -1
+
+- shell: ./install
+  args:
+    chdir: /srv/cphalcon/build
+  when: check_phalcon_extension.stdout.find('enabled') == -1
+
+- name: configurated extension
+  copy: src=phalcon.ini dest=/etc/php.d/phalcon.ini owner=root group=root mode=0644
+  when: check_phalcon_extension.stdout.find('enabled') == -1
+
+- name: restart php56w-fpm
+  service: name=php-fpm state=restarted  enabled=yes
+  when: check_phalcon_extension.stdout.find('enabled') == -1

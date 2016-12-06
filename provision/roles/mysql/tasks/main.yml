@@ -1,0 +1,24 @@
+---
+
+- name: download mysql rpm
+  get_url:
+    url: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+    dest: /usr/local/src
+
+- name: install mysql rpm
+  yum:
+    name: /usr/local/src/mysql-community-release-el7-5.noarch.rpm
+    state: present
+
+- name: ensure mysql-server installed
+  yum: name={{ item }} state=present
+  with_items:
+    - mysql-server
+    - MySQL-python
+
+- name: mysqld start
+  service: name=mysqld state=restarted enabled=yes
+
+
+- name: drop database test
+  mysql_db:  db=test state=absent

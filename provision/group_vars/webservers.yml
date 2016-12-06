@@ -1,0 +1,8 @@
+#NGINX
+listen_port: 80
+server_name: centos7.app.test
+worker_processess: 1
+root_path: /var/www/local.app.test
+types_hash_max_size : 512
+client_max_body_size : 2m
+vhost: centos7.app.test.conf
